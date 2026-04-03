@@ -2,6 +2,7 @@
 #include <iostream>
 #include <cstddef>
 #include <cstdint>
+#include <cstring>
 
 enum class GPUstate {
     Offline,
@@ -47,4 +48,18 @@ class Device {
         Device (const DeviceDescriptor& desc);
         ~Device();
         void printStatus();
+
+        // Getters for the driver
+        unsigned char* getVramPointer() { return vram_buffer; }
+        size_t getMemorySize() const { return memory_size; }
+        size_t getUsedMemory() const { return used_vram_bytes; }
+        uint8_t getCurrentTemp() const { return current_temp_c; }
+
+        // State management
+        bool canReserveVram(size_t size); // Checks if there's enough free space in VRAM and allocates it if so
+        void resetVram();
+        void setState(GPUstate state);
+
+
+
 };

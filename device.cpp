@@ -38,3 +38,23 @@ void Device::printStatus() {
     std::cout << "Core Clock Frequency: "<< core_clock_mhz << "\n";
 
 }
+
+bool Device::canReserveVram(size_t size) {
+    if(used_vram_bytes + size >= memory_size) {
+        std::cerr << "[DEVICE ERROR] Out of Memory! Requested: " << size << " bytes. \n";
+        return false;
+    }
+    used_vram_bytes += size;
+    return true;
+}
+
+void Device::setState(GPUstate state) {
+    current_state = state;
+}
+
+void Device::resetVram() {
+    used_vram_bytes = 0;
+    if (vram_buffer) {
+        std::memset(vram_buffer, 0, memory_size);
+    }
+}
