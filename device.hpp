@@ -48,9 +48,11 @@ class Device {
         Device (const DeviceDescriptor& desc);
         ~Device();
         void printStatus();
+        void memoryDump();
 
         // Getters for the driver
-        unsigned char* getVramPointer() { return vram_buffer; }
+        unsigned char* getVramStartPointer() { return vram_buffer; }
+        unsigned char* getVramPointer() { return vram_buffer + used_vram_bytes; }
         size_t getMemorySize() const { return memory_size; }
         size_t getUsedMemory() const { return used_vram_bytes; }
         uint8_t getCurrentTemp() const { return current_temp_c; }

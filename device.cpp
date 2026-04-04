@@ -58,3 +58,16 @@ void Device::resetVram() {
         std::memset(vram_buffer, 0, memory_size);
     }
 }
+
+ void Device::memoryDump() {
+    std::cout << "[vGPU Memory Dump]: \n";
+
+    int* int_ptr = reinterpret_cast<int*>(vram_buffer);
+    size_t num_ints = used_vram_bytes / sizeof(int);
+
+    for (size_t i = 0; i < num_ints; i++) {
+        std::cout << "[" << (void*)(int_ptr + i) << " : " << int_ptr[i] << "]\n";
+    }
+
+    std::cout << "\n[Memory Dumped] \n";
+ }
