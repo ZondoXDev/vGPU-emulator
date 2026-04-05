@@ -14,8 +14,8 @@ The simulator separates the processing environment into distinct components, adh
 
 - [x] **Hardware Abstraction:** Configurable GPU architecture via Descriptor patterns (Vendor, Execution Units, Clock Speed, VRAM size).
 - [x] **Safe Memory Management:** RAII implementation for VRAM allocation and cleanup.
-- [ ] **PCIe Bus Simulation:** Raw byte transfers using `std::memcpy` with strict VRAM capacity validation (OOM prevention). *[In Progress]*
-- [ ] **Command Queue & Execution:** Dispatching compute kernels (C++ lambdas) to the Device.
+- [x] **PCIe Bus Simulation:** Raw byte transfers using `std::memcpy` with strict VRAM capacity validation (OOM prevention). *[In Progress]*
+- [x] **Command Queue & Execution:** Dispatching compute kernels (C++ lambdas) to the Device.
 - [ ] **Parallel Processing:** Utilizing `std::thread` to simulate multiple Execution Units working simultaneously on VRAM chunks.
 - [ ] **Modern C++ Refactor:** Transitioning to `std::unique_ptr` and polymorphic GPU generations.
 
