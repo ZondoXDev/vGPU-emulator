@@ -3,6 +3,7 @@
 #include <cstddef>
 #include <cstdint>
 #include <cstring>
+#include <functional>
 
 enum class GPUstate {
     Offline,
@@ -60,7 +61,9 @@ class Device {
         // State management
         bool canReserveVram(size_t size); // Checks if there's enough free space in VRAM and allocates it if so
         void resetVram();
-        void setState(GPUstate state);
+        void setCurrentGPUState(GPUstate state);
+
+        void executeKernel(std::function<void(unsigned char*, size_t)> kernel);
 
 
 

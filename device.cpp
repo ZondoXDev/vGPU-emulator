@@ -48,7 +48,7 @@ bool Device::canReserveVram(size_t size) {
     return true;
 }
 
-void Device::setState(GPUstate state) {
+void Device::setCurrentGPUState(GPUstate state) {
     current_state = state;
 }
 
@@ -70,4 +70,20 @@ void Device::resetVram() {
     }
 
     std::cout << "\n[Memory Dumped] \n";
+ }
+
+ void Device::executeKernel(std::function<void(unsigned char*, size_t)> kernel) {
+    if (used_vram_bytes == 0) {
+        std::cout << "VRAM Empty. Nothing to execute\n";
+        return;
+    }
+
+    setCurrentGPUState(GPUstate::Processing);
+    std::cout << "[DEVICE] Exectuing compute kernel...\n";
+
+    kernel(vram_buffer, used_vram_bytes);
+
+    setCurrentGPUState(GPUstate::Idle);
+    std::cout << "[DEVICE] Compute kernel finished.\n";
+    
  }
