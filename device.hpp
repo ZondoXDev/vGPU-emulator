@@ -63,7 +63,7 @@ class Device {
         void resetVram();
         void setCurrentGPUState(GPUstate state);
 
-        void executeKernel(std::function<void(unsigned char*, size_t)> kernel);
+        void executeKernel(std::function<void(int*, size_t)> kernel);
 
 
 

@@ -67,17 +67,23 @@ int main() {
                 }
             };
 
-            auto krnl_modulo = [](unsigned char* vram, size_t active_bytes) {
-                int* int_data = reinterpret_cast<int*>(vram);
-                size_t num_elements = active_bytes / sizeof(int);
+            // auto krnl_modulo = [](unsigned char* vram, size_t active_bytes) {
+            //     int* int_data = reinterpret_cast<int*>(vram);
+            //     size_t num_elements = active_bytes / sizeof(int);
 
+            //     for (size_t i = 0; i < num_elements; ++i) {
+            //         if (int_data[i]%2 == 0) {
+            //             int_data[i] = 2;
+            //         }
+            //         else {
+            //             int_data[i] = 1;
+            //         }
+            //     }
+            // };
+            auto krnl_modulo = [](int* data, size_t num_elements) {
                 for (size_t i = 0; i < num_elements; ++i) {
-                    if (int_data[i]%2 == 0) {
-                        int_data[i] = 2;
-                    }
-                    else {
-                        int_data[i] = 1;
-                    }
+                    if (data[i] % 2 == 0) data[i] = 2;
+                    else data[i] = 1;
                 }
             };
 

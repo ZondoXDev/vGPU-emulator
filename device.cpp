@@ -1,4 +1,7 @@
+#include <thread>
+#include <vector>
 #include "device.hpp"
+
 Device::Device(const DeviceDescriptor& desc){
     device_name = desc.device_name;
     vendor_name = desc.vendor_name;
@@ -72,16 +75,40 @@ void Device::resetVram() {
     std::cout << "\n[Memory Dumped] \n";
  }
 
- void Device::executeKernel(std::function<void(unsigned char*, size_t)> kernel) {
+ void Device::executeKernel(std::function<void(int*, size_t)> kernel) {
     if (used_vram_bytes == 0) {
         std::cout << "VRAM Empty. Nothing to execute\n";
         return;
     }
 
     setCurrentGPUState(GPUstate::Processing);
-    std::cout << "[DEVICE] Exectuing compute kernel...\n";
+    std::cout << "[DEVICE] Dividing kernel into " << execution_units << " Execution Units...\n";
 
-    kernel(vram_buffer, used_vram_bytes);
+    std::vector<std::thread> eu_threads;
+
+    int* int_vram = reinterpret_cast<int*>(vram_buffer);
+
+    size_t total_elements = used_vram_bytes / sizeof(int);
+
+    size_t elements_per_eu = total_elements / execution_units;
+
+    for (uint32_t i = 0; i < execution_units; ++i) {
+        int* eu_start_ptr = int_vram + (elements_per_eu * i);
+
+        size_t current_eu_elements = elements_per_eu;
+
+        if (i == execution_units - 1) {
+            current_eu_elements += total_elements % execution_units;
+        }
+
+        eu_threads.push_back(std::thread(kernel, eu_start_ptr, current_eu_elements));
+    }
+
+    for (auto& t : eu_threads) {
+        if (t.joinable()) {
+            t.join();
+        }
+    }
 
     setCurrentGPUState(GPUstate::Idle);
     std::cout << "[DEVICE] Compute kernel finished.\n";
